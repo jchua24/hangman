@@ -1,6 +1,7 @@
 defmodule Hangman do
 
-  alias Hangman.Game 
+  #redirecting API call to where it is implemented
+  alias Hangman.Game
   defdelegate new_game(), to: Game
-  
+
 end

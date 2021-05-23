@@ -22,7 +22,7 @@ defmodule Hangman.MixProject do
   defp deps do
     [
       {:dictionary, path: "../dictionary"},
-     
+
     ]
   end
 end
