@@ -8,24 +8,28 @@
         used: MapSet.new(),
     )
 
-    #initialize game with specific word
-    def new_game(word) do
-        #same syntax as regular map, but uses module name to access defstruct
-        %Hangman.Game{letters: word |> String.codepoints}
-    end
 
     #initialize game with random word
     def new_game() do
         new_game(Dictionary.random_word)
     end
 
+    #initialize game with specific word
+    def new_game(word) do
+        #same syntax as regular map, but uses module name to access defstruct
+        %Hangman.Game{letters: word |> String.codepoints}
+    end
+
+
     #pattern matching with game state - executes if game_state is already won or lost
     def make_move(game = %{game_state: state}, _guess) when state in [:won, :lost] do
-        game #return game
+        game
+        |> return_with_tally
     end
 
     def make_move(game, guess) do
         accept_move(game, guess, MapSet.member?(game.used, guess)) #return game
+        |> return_with_tally
     end
 
     #returns info that is useful to the client
@@ -40,7 +44,6 @@
 
     ########################################################################################
     ###### private functions below ######
-
 
     #already guessed is true
     defp accept_move(game, guess, _already_guessed = true) do
@@ -91,5 +94,7 @@
     #what to reveal based on previously guessed or not
     defp reveal_letter(letter, _in_word = true), do: letter
     defp reveal_letter(letter, _in_word = false), do: "_"
+
+    defp return_with_tally(game), do: {game, tally(game)}
 
 end
