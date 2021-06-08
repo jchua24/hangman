@@ -1,12 +1,10 @@
 defmodule TextClient.Interact do
 
+  @hangman_server :"hangman@jgodwinchua-C02TJ0L3HF1T"
   alias TextClient.{State, Player}
 
   def start() do
-
-    #|> IO.inspect() #used to show current state of pipeline, returns whatever is passed to it
-
-    Hangman.new_game()
+    new_game()
     |> setup_state()
     |> Player.play()
   end
@@ -18,7 +16,9 @@ defmodule TextClient.Interact do
     }
   end
 
-  def play(state) do
-    #handle interactions with human player
+  defp new_game() do
+    #make a call to start a Hangman server
+    Node.connect(@hangman_server)
+    :rpc.call(@hangman_server, Hangman, :new_game, []) #call hangman server and start new game
   end
 end
